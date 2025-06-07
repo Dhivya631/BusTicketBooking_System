@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <title>View All bus</title>
+    <style>
+        h3{
+            font-family:Times New Roman;
+            text-align:center;
+        }
+        .custom-form{
+            width:25%;
+            margin:10 auto;
+        }
+        .thead-dark{
+            font-family:Times New Roman;
+            text-align:center;
+        }
+        .center{
+            text-align:center;
+        }
+        tbody{
+            font-size:15px;
+            text-align:center;
+        }
+    </style>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo01" aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
+        <a class="navbar-brand" href="#">Bus Ticket Booking System</a>
+        <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+            <li class="nav-item active">
+                <a class="nav-link" href="/api/admin/homePage">Home <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Register
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                    <a class="dropdown-item" href="/api/customer/register">Customer</a>
+                </div>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink1" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Login
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                    <a class="dropdown-item" href="/api/customer/login">Customer</a>
+                    <a class="dropdown-item" href="/api/admin/login">Admin</a>
+                </div>
+            </li>
+        </ul>
+    </div>
+</nav>
+<div class="container mt-4">
+    <h3>View Buses</h3>
+    <form th:action="@{/api/admin/viewBuses}" method="get" class="mb-4 custom-form">
+        <div class="input-group">
+            <input type="text" class="form-control" name="busNumber" th:value="${busNumber}" placeholder="Search by Bus Number">
+            <div class="input-group-append">
+                <button type="submit" class="btn btn-primary">Search</button>
+            </div>
+        </div>
+    </form>
+    <table class="table table-bordered table-striped">
+        <thead class="thead-dark">
+        <tr>
+            <th>Bus Number</th>
+            <th>Capacity</th>
+            <th>Bus Type</th>
+            <th>Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="bus : ${buses}">
+            <td th:text="${bus.busNumber}"></td>
+            <td th:text="${bus.capacity}"></td>
+            <td th:text="${bus.busType}"></td>
+            <td class="action-buttons">
+                <a th:href="@{/api/admin/edit/{id}(id=${bus.busId})}" class="btn btn-sm btn-primary w-25">
+                    <i class="bi bi-pencil"></i> Edit
+                </a>
+                <a th:href="@{/api/admin/delete/{id}(id=${bus.busId})}" class="btn btn-sm btn-danger w-25">
+                    <i class="bi bi-trash"></i> Delete
+                </a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <!-- Pagination -->
+    <nav th:if="${totalPages > 1}">
+        <ul class="pagination">
+            <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled' : ''">
+                <a class="page-link" th:href="@{/api/admin/viewBuses(page=${currentPage - 1}, size=${5}, busNumber=${busNumber})}">Previous</a>
+            </li>
+            <li class="page-item" th:each="i : ${#numbers.sequence(0, totalPages - 1)}" th:classappend="${i == currentPage} ? 'active' : ''">
+                <a class="page-link" th:href="@{/api/admin/viewBuses(page=${i}, size=${5}, busNumber=${busNumber})}" th:text="${i + 1}"></a>
+            </li>
+            <li class="page-item" th:classappend="${currentPage == totalPages - 1} ? 'disabled' : ''">
+                <a class="page-link" th:href="@{/api/admin/viewBuses(page=${currentPage + 1}, size=${5}, busNumber=${busNumber})}">Next</a>
+            </li>
+        </ul>
+    </nav>
+    <div class="center">
+        <a href="/api/admin/dash">Back to admin dashboard</a>
+    </div>
+</div>
+</body>
+</html>

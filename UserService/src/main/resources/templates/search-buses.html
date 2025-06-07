@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <title>Search Buses</title>
+    <style>
+        body{
+            font-family:Times New Roman;
+        }
+        h3{
+            font-family:Times New Roman;
+        }
+        h4{
+            font-family:Times New Roman;
+        }
+        .center{
+            text-align:center;
+        }
+        .action-buttons{
+            font-size:25px;
+            color:white;
+        }
+    </style>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo01" aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
+        <a class="navbar-brand" href="#">Bus Ticket Booking System</a>
+        <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+            <li class="nav-item active">
+                <a class="nav-link" href="/api/customer/homePage">Home <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Register
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                    <a class="dropdown-item" href="/api/customer/register">Customer</a>
+                </div>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink1" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Login
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                    <a class="dropdown-item" href="/api/customer/login">Customer</a>
+                    <a class="dropdown-item" href="/api/admin/login">Admin</a>
+                </div>
+            </li>
+        </ul>
+    </div>
+</nav>
+<div class="container mt-5">
+    <h3 class="text-center mb-4">Search Buses</h3>
+    <form th:action="@{/api/buses/search-buses}" method="get" class="mb-4">
+        <div class="row g-3">
+            <div class="col-md-3">
+                <input type="text" name="origin" class="form-control" placeholder="Origin" required>
+            </div>
+            <div class="col-md-3">
+                <input type="text" name="destination" class="form-control" placeholder="Destination" required>
+            </div>
+            <div class="col-md-3">
+                <input type="date" name="date" class="form-control" required>
+            </div>
+            <div class="col-md-3">
+                <button type="submit" class="btn btn-primary w-100">Search</button>
+            </div>
+        </div>
+    </form>
+    <div th:if="${buses != null && !buses.empty}">
+        <h4 class="mb-3">Available Buses</h4>
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>Bus Number</th>
+                <th>Origin</th>
+                <th>Destination</th>
+                <th>Bus Type</th>
+                <th>Departure Time</th>
+                <th>Arrival Time</th>
+                <th>Total seats</th>
+                <th>Fare</th>
+                <th>Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="bus : ${buses}">
+                <td th:text="${bus.busNumber}"></td>
+                <td th:text="${bus.origin}"></td>
+                <td th:text="${bus.destination}"></td>
+                <td th:text="${bus.busType}"></td>
+                <td th:text="${bus.departureTime}"></td>
+                <td th:text="${bus.arrivalTime}"></td>
+                <td th:text="${bus.capacity}"></td>
+                <td th:text="${bus.fare}"></td>
+                <td class="action-buttons">
+                    <a th:href="@{/api/booking/book-bus(busNumber=${bus.busNumber})}" class="btn btn-sm btn-primary w-100">Book bus</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div th:if="${buses != null && buses.empty}" class="alert alert-warning">
+        No buses found for the selected route and date.
+    </div>
+    <div class="center">
+        <a href="/api/customer/dash">Back to customer dashboard</a>
+    </div>
+</div>
+</body>
+</html>

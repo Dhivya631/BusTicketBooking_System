@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <title>Routes</title>
+    <style>
+        h3 {
+            text-align: center;
+            font-family: Times New Roman;
+        }
+        .center {
+            text-align: center;
+        }
+        table {
+            text-align: center;
+            font-family: Times New Roman;
+        }
+        .no-routes {
+            color: red;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo01" aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
+        <a class="navbar-brand" href="#">Bus Ticket Booking System</a>
+        <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+            <li class="nav-item active">
+                <a class="nav-link" href="/api/admin/homePage">Home <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Register
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                    <a class="dropdown-item" href="/api/customer/register">Customer</a>
+                </div>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink1" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Login
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                    <a class="dropdown-item" href="/api/customer/login">Customer</a>
+                    <a class="dropdown-item" href="/api/admin/login">Admin</a>
+                </div>
+            </li>
+        </ul>
+    </div>
+</nav>
+<div class="container mt-3">
+    <h3>View all routes</h3>
+    <!-- Search Form -->
+    <form th:action="@{/api/admin/routes/view}" method="get" class="mb-3">
+        <div class="form-row">
+            <div class="col">
+                <input type="text" name="origin" class="form-control w-75" placeholder="Search by origin" th:value="${origin}">
+            </div>
+            <div class="col">
+                <input type="text" name="destination" class="form-control w-75" placeholder="Search by destination" th:value="${destination}">
+            </div>
+            <div class="col">
+                <button type="submit" class="btn btn-primary">Search</button>
+            </div>
+        </div>
+    </form>
+    <!-- Routes Table -->
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover">
+                <thead class="table-dark">
+                <tr>
+                    <th>ID</th>
+                    <th>Origin</th>
+                    <th>Destination</th>
+                    <th>Distance</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:if="${routes.empty}">
+                    <td colspan="5" class="no-routes">No routes found</td>
+                </tr>
+                <tr th:each="route : ${routes}">
+                    <td th:text="${route.routeId}"></td>
+                    <td th:text="${route.origin}"></td>
+                    <td th:text="${route.destination}"></td>
+                    <td th:text="${route.distance}"></td>
+                    <td class="action-buttons">
+                        <a th:href="@{/api/admin/routes/edit/{id}(id=${route.routeId})}" class="btn btn-sm btn-primary w-25">
+                            <i class="bi bi-pencil"></i> Edit
+                        </a>
+                        <a th:href="@{/api/admin/routes/delete/{id}(id=${route.routeId})}" class="btn btn-sm btn-danger w-25">
+                            <i class="bi bi-trash"></i> Delete
+                        </a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <!-- Pagination -->
+    <div class="center">
+        <nav aria-label="Page navigation">
+            <ul class="pagination justify-content-center">
+                <li class="page-item" th:classappend="${currentPage == 1} ? 'disabled'">
+                    <a class="page-link" th:href="@{/api/admin/routes/view(page=1, origin=${origin}, destination=${destination})}">First</a>
+                </li>
+                <li class="page-item" th:classappend="${currentPage == 1} ? 'disabled'">
+                    <a class="page-link" th:href="@{/api/admin/routes/view(page=${currentPage - 1}, origin=${origin}, destination=${destination})}">Previous</a>
+                </li>
+                <li class="page-item" th:each="page : ${#numbers.sequence(1, totalPages)}" th:classappend="${page == currentPage} ? 'active'">
+                    <a class="page-link" th:href="@{/api/admin/routes/view(page=${page}, origin=${origin}, destination=${destination})}" th:text="${page}"></a>
+                </li>
+                <li class="page-item" th:classappend="${currentPage == totalPages} ? 'disabled'">
+                    <a class="page-link" th:href="@{/api/admin/routes/view(page=${currentPage + 1}, origin=${origin}, destination=${destination})}">Next</a>
+                </li>
+                <li class="page-item" th:classappend="${currentPage == totalPages} ? 'disabled'">
+                    <a class="page-link" th:href="@{/api/admin/routes/view(page=${totalPages}, origin=${origin}, destination=${destination})}">Last</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+    <div class="center">
+        <a href="/api/admin/dash">Back to admin dashboard</a>
+    </div>
+</div>
+</body>
+</html>

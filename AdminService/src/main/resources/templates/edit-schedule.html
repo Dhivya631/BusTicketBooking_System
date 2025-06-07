@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <title>Update Schedule</title>
+    <style>
+        body{
+            background-image:url('/img/admin/pic.jpg');
+            background-repeat:no-repeat;
+            background-size:cover;
+            margin: 0;
+        }
+        .form-container {
+            font-family:Times New Roman;
+            max-width: 600px;
+            margin: 0;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        h3{
+            text-align:center;
+        }
+    </style>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo01" aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
+        <a class="navbar-brand" href="#">Bus Ticket Booking System</a>
+        <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+            <li class="nav-item active">
+                <a class="nav-link" href="/api/admin/homePage">Home <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Register
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                    <a class="dropdown-item" href="/api/customer/register">Customer</a>
+                </div>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink1" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Login
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                    <a class="dropdown-item" href="/api/customer/login">Customer</a>
+                    <a class="dropdown-item" href="/api/admin/login">Admin</a>
+                </div>
+            </li>
+        </ul>
+    </div>
+</nav>
+<div class="container mt-4">
+    <div class="form-container">
+        <h3>Update Schedule</h3>
+        <form th:action="@{/api/admin/schedules/edit/{id}(id=${schedule.scheduleId})}" th:object="${schedule}" method="post">
+            <!-- Route Dropdown -->
+            <div class="form-group">
+                <label for="route">Route</label>
+                <select class="form-control" id="route" th:field="*{route}" required>
+                    <option value="">Select a route</option>
+                    <option th:each="route : ${routes}" th:value="${route.routeId}" th:text="${route.origin + ' to ' + route.destination}"></option>
+                </select>
+            </div>
+            <!-- Bus ID -->
+            <div class="form-group">
+                <label for="bus">Bus</label>
+                <select class="form-control" id="bus" th:field="*{bus}" required>
+                    <option value="">Select a bus</option>
+                    <option th:each="bus : ${buses}" th:value="${bus.busId}" th:text="${bus.busNumber}"></option>
+                </select>
+            </div>
+            <!-- Departure Time -->
+            <div class="form-group">
+                <label for="departureTime">Departure Time</label>
+                <input type="datetime-local" class="form-control" id="departureTime" th:field="*{departureTime}" required>
+            </div>
+            <!-- Arrival Time -->
+            <div class="form-group">
+                <label for="arrivalTime">Arrival Time</label>
+                <input type="datetime-local" class="form-control" id="arrivalTime" th:field="*{arrivalTime}" required>
+            </div>
+            <!-- date-->
+            <div class="form-group">
+                <label for="date">Date</label>
+                <input type="date" class="form-control" id="date" th:field="*{date}" required>
+            </div>
+            <!-- Fare -->
+            <div class="form-group">
+                <label for="fare">Fare</label>
+                <input type="number" step="0.01" class="form-control" id="fare" th:field="*{fare}" required>
+            </div>
+            <!-- Submit Button -->
+            <div class="center">
+                <button type="submit" class="btn btn-primary">Save</button>
+                <a href="/api/admin/schedules/view" class="btn btn-secondary">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+</body>
+</html>
