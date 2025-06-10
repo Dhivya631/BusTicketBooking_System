@@ -222,11 +222,23 @@ http://localhost:9191
 
 **Start Microservices:**
 
+```bash
 - Admin Service: http://localhost:8081
 - User Service: http://localhost:8082
+```
 
+**Start Config Server:**
+
+```bash
+http://localhost:8888/
+```
+
+**Start Zipkin Dashboard:**
+
+```bash
+http://localhost:9411/zipkin
+```
 ---
-
 ## 📁 Folder Structure
 
 ``` text
