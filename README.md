@@ -223,8 +223,8 @@ http://localhost:9191
 **Start Microservices:**
 
 ```bash
-- Admin Service: http://localhost:8081
-- User Service: http://localhost:8082
+Admin Service: http://localhost:8081
+User Service: http://localhost:8082
 ```
 
 **Start Config Server:**
@@ -239,7 +239,7 @@ http://localhost:8888/
 http://localhost:9411/zipkin
 ```
 ---
-## 📁 Folder Structure
+## 📁 Directory Structure
 
 ``` text
 bus-ticket-booking/
