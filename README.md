@@ -1,5 +1,7 @@
 # 🚌 Bus Ticket Booking System – Microservices Project
 
+## 📌 Overview
+
 A **Bus Ticket Booking System** built using **Spring Boot Microservices**. The system supports two primary roles: **Admin** and **Passenger (User)**. Each role has dedicated services with secure access using **JWT-based Authentication** and **Spring Security**. The system also supports **PostgreSQL** for data persistence, **JasperReports** for PDF report generation, and uses **JUnit 5**, **Mockito**, and **JaCoCo** for testing and code coverage.
 
 ---
